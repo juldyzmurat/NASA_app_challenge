@@ -1,2 +1,1 @@
-# NASA_app_challenge
--NASA app challenge 2023
+# mightAsk NASA Space Apps Hackathon
