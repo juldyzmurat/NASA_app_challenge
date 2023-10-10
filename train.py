@@ -1,7 +1,4 @@
-LR = 5e-4
-EPOCHS = 100
-EPOCHS_PER_UPDATE = 1
-RUNNAME = "Sen1Floods11"
+
 
 
 import torch
@@ -9,6 +6,11 @@ from torchvision import transforms
 import torchvision.transforms.functional as F
 import random
 from PIL import Image
+
+LR = 5e-4
+EPOCHS = 100
+EPOCHS_PER_UPDATE = 1
+RUNNAME = "Sen1Floods11"
 
 
 class InMemoryDataset(torch.utils.data.Dataset):
@@ -144,7 +146,7 @@ def download_flood_water_data_from_list(l):
 
 
 def load_flood_train_data(input_root, label_root):
-    fname = "flood_train_data.csv"
+    fname = "/mightask_bucket1/v1.1/split/flood_handlabeled/flood_train_data.csv"
     training_files = []
     with open(fname) as f:
         for line in csv.reader(f):
@@ -154,7 +156,7 @@ def load_flood_train_data(input_root, label_root):
 
 
 def load_flood_valid_data(input_root, label_root):
-    fname = "flood_valid_data.csv"
+    fname = "/mightask_bucket1/v1.1/split/flood_handlabeled/flood_valid_data.csv"
     validation_files = []
     with open(fname) as f:
         for line in csv.reader(f):
@@ -164,7 +166,7 @@ def load_flood_valid_data(input_root, label_root):
 
 
 def load_flood_test_data(input_root, label_root):
-    fname = "flood_test_data.csv"
+    fname = "/mightask_bucket1/v1.1/split/flood_handlabeled/flood_test_data.csv"
     testing_files = []
     with open(fname) as f:
         for line in csv.reader(f):
@@ -173,7 +175,7 @@ def load_flood_test_data(input_root, label_root):
     return download_flood_water_data_from_list(testing_files)
 
 
-train_data = load_flood_train_data("S1/", "Labels/")
+train_data = load_flood_train_data("/mightask_bucket1/v1.1/data/flood_events/HandLabeled/S2Hand/", "/mightask_bucket1/v1.1/data/flood_events/HandLabeled/LabelHand/")
 train_dataset = InMemoryDataset(train_data, processAndAugment)
 train_loader = torch.utils.data.DataLoader(
     train_dataset,
@@ -190,7 +192,7 @@ train_loader = torch.utils.data.DataLoader(
 )
 train_iter = iter(train_loader)
 
-valid_data = load_flood_valid_data("S1/", "Labels/")
+valid_data = load_flood_train_data("/mightask_bucket1/v1.1/data/flood_events/HandLabeled/S2Hand/", "/mightask_bucket1/v1.1/data/flood_events/HandLabeled/LabelHand/")
 valid_dataset = InMemoryDataset(valid_data, processTestIm)
 valid_loader = torch.utils.data.DataLoader(
     valid_dataset,
@@ -513,3 +515,13 @@ for i in range(start, 1000):
     display(plt.show())
 
     print("max valid iou:", max_valid_iou)
+
+
+#%%
+from google.colab import auth
+auth.authenticate_user()
+
+!curl https://sdk.cloud.google.com | bash
+
+!gcloud init
+# %%
